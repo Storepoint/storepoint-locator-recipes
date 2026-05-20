@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Store locator from CSV — Storepoint</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .container { width: 100%; height: 100vh; padding: 24px; box-sizing: border-box; }
+        #storepoint-widget { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="storepoint-widget"></div>
+    </div>
+
+    <script>
+        window.Storepoint = window.Storepoint || { _q: [], on: function (e, c) { this._q.push([e, c]) } };
+
+        window.loadStorepoint = function () {
+            new StorepointWidget('local', '#storepoint-widget', {
+                dataSource: {
+                    type: 'csv',
+                    // Local sample data — runnable from this folder via a static server.
+                    // For your own CSV, point this at any URL that returns CSV.
+                    url: '../../../data/sample-locations.csv'
+                },
+                fieldMap: {
+                    name: 'name',
+                    lat: 'latitude',
+                    lng: 'longitude',
+                    address: { columns: ['street', 'city', 'state', 'zip'], join: ', ' },
+                    phone: 'phone',
+                    website: 'website',
+                    image_url: 'image_url',
+                    description: 'description',
+                    tags: [
+                        { column: 'store_type' },
+                        { column: 'services', split: ',' }
+                    ]
+                },
+                settings: {
+                    accent_color: '#1f5f3b',
+                    search_radius_default: 25,
+                    search_radius_options: [10, 25, 50, 100],
+                    location_initial_load_count: 20,
+                    filters: [
+                        {
+                            id: 'store_type',
+                            name: 'Store type',
+                            tags: [
+                                { tag: 'cafe',     options: { label: 'Cafe',     color: '#1f5f3b' } },
+                                { tag: 'roastery', options: { label: 'Roastery', color: '#6f4e37' } }
+                            ]
+                        },
+                        {
+                            id: 'services',
+                            name: 'Services',
+                            tags: [
+                                { tag: 'espresso',   options: { label: 'Espresso' } },
+                                { tag: 'pour-over',  options: { label: 'Pour Over' } },
+                                { tag: 'pastries',   options: { label: 'Pastries' } },
+                                { tag: 'brunch',     options: { label: 'Brunch' } },
+                                { tag: 'vegan',      options: { label: 'Vegan' } },
+                                { tag: 'patio',      options: { label: 'Patio' } },
+                                { tag: 'wifi',       options: { label: 'Wi-Fi' } },
+                                { tag: 'parking',    options: { label: 'Parking' } },
+                                { tag: 'drive-thru', options: { label: 'Drive-Thru' } }
+                            ]
+                        }
+                    ]
+                },
+                mapProvider: {
+                    use: 'mapbox',
+                    accessToken: 'YOUR_MAPBOX_PUBLIC_TOKEN'
+                }
+            }).load();
+        };
+
+        (function () {
+            var t = document.createElement('script');
+            t.async = true;
+            t.src = 'https://widget.storepoint.co/embed.js';
+            t.onload = function () { window.loadStorepoint && window.loadStorepoint(); };
+            document.head.appendChild(t);
+        })();
+    </script>
+</body>
+</html>

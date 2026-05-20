@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Product locator — Storepoint</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .container { width: 100%; height: 100vh; padding: 24px; box-sizing: border-box; }
+        #storepoint-widget { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="storepoint-widget"></div>
+    </div>
+
+    <script>
+        window.Storepoint = window.Storepoint || { _q: [], on: function (e, c) { this._q.push([e, c]) } };
+
+        // Each row is a shop, the `flavors` column lists the products that shop carries.
+        // Visitors filter by product to find the nearest shop carrying it.
+        window.loadStorepoint = function () {
+            new StorepointWidget('local', '#storepoint-widget', {
+                dataSource: {
+                    type: 'csv',
+                    // Local sample data — runnable from this folder via a static server.
+                    url: '../../../data/product-flavors.csv'
+                },
+                fieldMap: {
+                    name: 'name',
+                    lat: 'latitude',
+                    lng: 'longitude',
+                    address: { columns: ['street', 'city', 'state', 'zip'], join: ', ' },
+                    phone: 'phone',
+                    website: 'website',
+                    image_url: 'image_url',
+                    description: 'description',
+                    // Pull tags from the comma-separated `flavors` cell.
+                    tags: { column: 'flavors', split: ',' }
+                },
+                settings: {
+                    accent_color: '#a855f7',
+                    search_radius_default: 50,
+                    search_radius_options: [10, 25, 50, 100],
+                    filters: [
+                        {
+                            id: 'flavors',
+                            name: 'Flavor',
+                            tags: [
+                                { tag: 'vanilla',        options: { label: 'Vanilla',         color: '#f5deb3' } },
+                                { tag: 'chocolate',      options: { label: 'Chocolate',       color: '#5d3a1a' } },
+                                { tag: 'strawberry',     options: { label: 'Strawberry',      color: '#dd6b75' } },
+                                { tag: 'pistachio',      options: { label: 'Pistachio',       color: '#93c47d' } },
+                                { tag: 'mint-chip',      options: { label: 'Mint Chip',       color: '#7fb3a7' } },
+                                { tag: 'salted-caramel', options: { label: 'Salted Caramel',  color: '#c08552' } },
+                                { tag: 'matcha',         options: { label: 'Matcha',          color: '#6f8a4c' } },
+                                { tag: 'cookies-cream',  options: { label: 'Cookies & Cream', color: '#3d3d3d' } }
+                            ]
+                        }
+                    ]
+                },
+                mapProvider: {
+                    use: 'mapbox',
+                    accessToken: 'YOUR_MAPBOX_PUBLIC_TOKEN'
+                }
+            }).load();
+        };
+
+        (function () {
+            var t = document.createElement('script');
+            t.async = true;
+            t.src = 'https://widget.storepoint.co/embed.js';
+            t.onload = function () { window.loadStorepoint && window.loadStorepoint(); };
+            document.head.appendChild(t);
+        })();
+    </script>
+</body>
+</html>

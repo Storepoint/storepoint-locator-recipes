@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Service provider locator — Storepoint</title>
+    <style>
+        body, html { margin: 0; padding: 0; height: 100vh; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        .container { width: 100%; height: 100vh; padding: 24px; box-sizing: border-box; }
+        #storepoint-widget { width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="storepoint-widget"></div>
+    </div>
+
+    <script>
+        window.Storepoint = window.Storepoint || { _q: [], on: function (e, c) { this._q.push([e, c]) } };
+
+        // Three filter groups:
+        //   Specialty      — single value per row
+        //   Services       — comma-separated list, split into multiple tags
+        //   Certifications — single value per row
+        // `available_from` isn't mapped, so it surfaces as a custom text field on each card.
+        window.loadStorepoint = function () {
+            new StorepointWidget('local', '#storepoint-widget', {
+                dataSource: {
+                    type: 'csv',
+                    // Local sample data — runnable from this folder via a static server.
+                    url: '../../../data/service-providers.csv'
+                },
+                fieldMap: {
+                    name: 'name',
+                    lat: 'latitude',
+                    lng: 'longitude',
+                    address: { columns: ['street', 'city', 'state', 'zip'], join: ', ' },
+                    phone: 'phone',
+                    website: 'website',
+                    image_url: 'image_url',
+                    description: 'description',
+                    tags: [
+                        { column: 'specialty' },
+                        { column: 'services', split: ',' },
+                        { column: 'certifications' }
+                    ]
+                },
+                settings: {
+                    accent_color: '#0d4f8c',
+                    search_radius_default: 25,
+                    search_radius_options: [10, 25, 50, 100],
+                    enable_keyword_search: true,
+                    filters: [
+                        {
+                            id: 'specialty',
+                            name: 'Specialty',
+                            tags: [
+                                { tag: 'plumbing',   options: { label: 'Plumbing',   color: '#0d4f8c' } },
+                                { tag: 'electrical', options: { label: 'Electrical', color: '#b48f0a' } },
+                                { tag: 'hvac',       options: { label: 'HVAC',       color: '#5a7d4f' } }
+                            ]
+                        },
+                        {
+                            id: 'services',
+                            name: 'Services',
+                            tags: [
+                                { tag: 'drain-cleaning',   options: { label: 'Drain cleaning' } },
+                                { tag: 'leak-repair',      options: { label: 'Leak repair' } },
+                                { tag: 'water-heater',     options: { label: 'Water heater' } },
+                                { tag: 'bathroom-remodel', options: { label: 'Bathroom remodel' } },
+                                { tag: 'panel-upgrade',    options: { label: 'Panel upgrade' } },
+                                { tag: 'ev-charger',       options: { label: 'EV charger' } },
+                                { tag: 'lighting',         options: { label: 'Lighting' } },
+                                { tag: 'wiring',           options: { label: 'Wiring' } },
+                                { tag: 'solar-tie-in',     options: { label: 'Solar tie-in' } },
+                                { tag: 'smoke-alarm',      options: { label: 'Smoke alarm' } },
+                                { tag: 'furnace',          options: { label: 'Furnace' } },
+                                { tag: 'ac',               options: { label: 'AC' } },
+                                { tag: 'heat-pump',        options: { label: 'Heat pump' } },
+                                { tag: 'maintenance',      options: { label: 'Maintenance' } },
+                                { tag: 'emergency',        options: { label: 'Emergency calls' } }
+                            ]
+                        },
+                        {
+                            id: 'certifications',
+                            name: 'Certification',
+                            tags: [
+                                { tag: 'licensed-master-plumber', options: { label: 'Master Plumber' } },
+                                { tag: 'master-electrician',      options: { label: 'Master Electrician' } },
+                                { tag: 'licensed-hvac',           options: { label: 'Licensed HVAC' } }
+                            ]
+                        }
+                    ]
+                },
+                mapProvider: {
+                    use: 'mapbox',
+                    accessToken: 'YOUR_MAPBOX_PUBLIC_TOKEN'
+                }
+            }).load();
+        };
+
+        (function () {
+            var t = document.createElement('script');
+            t.async = true;
+            t.src = 'https://widget.storepoint.co/embed.js';
+            t.onload = function () { window.loadStorepoint && window.loadStorepoint(); };
+            document.head.appendChild(t);
+        })();
+    </script>
+</body>
+</html>

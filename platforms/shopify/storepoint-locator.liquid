@@ -1,0 +1,173 @@
+{%- comment -%}
+  Storepoint Locator — Shopify Theme Section
+
+  Drop this file into your theme's `sections/` folder. After uploading, merchants
+  can add the locator to any page through the Shopify theme editor and configure
+  its settings visually — no code changes per page.
+
+  Shopify Markets:
+  This section reads `localization.language.iso_code` so the locator
+  auto-localizes per Shopify Market. French Market visitors see French phrases,
+  German Market visitors see German, and so on — provided you've set up the
+  matching translations in your Storepoint dashboard's Phrases settings. Leave
+  the "Language override" setting blank to use the visitor's Market.
+
+  Recipe: https://github.com/storepoint/storepoint-locator-recipes
+  Widget JavaScript API: https://storepoint.co/developers/widget-javascript-api
+{%- endcomment -%}
+
+<div
+  id="storepoint-widget-{{ section.id }}"
+  class="storepoint-locator-section"
+  style="height: {{ section.settings.height | default: 720 }}px;"
+></div>
+
+{%- assign widget_id = section.settings.widget_id | strip -%}
+{%- assign tag_filter = section.settings.tag_filter | strip -%}
+{%- assign default_view = section.settings.default_view | default: 'all' -%}
+{%- assign language_override = section.settings.language_override | strip -%}
+
+{%- comment -%} Resolve language: merchant override wins, otherwise pull the active Shopify Market language. {%- endcomment -%}
+{%- if language_override != blank -%}
+  {%- assign resolved_language = language_override -%}
+{%- else -%}
+  {%- assign resolved_language = localization.language.iso_code -%}
+{%- endif -%}
+
+<script>
+  (function () {
+    if (!{{ section.id | json }} || {{ widget_id | json }} === '') {
+      console.warn('Storepoint section {{ section.id }}: missing widget ID');
+      return;
+    }
+
+    window.Storepoint = window.Storepoint || {
+      _q: [],
+      on: function (event, callback) { this._q.push([event, callback]); }
+    };
+
+    var tagsArray = {{ tag_filter | json }}
+      .split(',')
+      .map(function (value) { return value.trim(); })
+      .filter(Boolean);
+
+    var widgetOptions = {
+      defaultView: {{ default_view | json }}
+    };
+
+    if (tagsArray.length) {
+      widgetOptions.tags = tagsArray;
+    }
+
+    if ({{ resolved_language | json }}) {
+      widgetOptions.language = {{ resolved_language | json }};
+    }
+
+    function loadStorepointForSection() {
+      new StorepointWidget(
+        {{ widget_id | json }},
+        '#storepoint-widget-{{ section.id }}',
+        widgetOptions
+      );
+    }
+
+    if (window.StorepointWidget) {
+      loadStorepointForSection();
+    } else {
+      var existingScript = document.querySelector('script[data-storepoint-embed]');
+      if (existingScript) {
+        existingScript.addEventListener('load', loadStorepointForSection, { once: true });
+      } else {
+        var embedScript = document.createElement('script');
+        embedScript.src = 'https://widget.storepoint.co/embed.js';
+        embedScript.async = true;
+        embedScript.setAttribute('data-storepoint-embed', '');
+        embedScript.addEventListener('load', loadStorepointForSection, { once: true });
+        document.head.appendChild(embedScript);
+      }
+    }
+  })();
+</script>
+
+<style>
+  .storepoint-locator-section {
+    width: 100%;
+  }
+  @media (max-width: 700px) {
+    .storepoint-locator-section {
+      height: {{ section.settings.mobile_height | default: 880 }}px !important;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Storepoint locator",
+  "tag": "section",
+  "class": "section-storepoint-locator",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Storepoint account"
+    },
+    {
+      "type": "text",
+      "id": "widget_id",
+      "label": "Public widget ID",
+      "info": "Find this on your Storepoint dashboard at app.storepoint.co/dashboard"
+    },
+    {
+      "type": "header",
+      "content": "Pre-filter"
+    },
+    {
+      "type": "text",
+      "id": "tag_filter",
+      "label": "Tags (comma separated)",
+      "info": "Show only locations matching these tags. Leave blank to show all locations."
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default view",
+      "default": "all",
+      "options": [
+        { "value": "all", "label": "Show all locations" },
+        { "value": "ip_geolocation", "label": "Auto-detect visitor location" },
+        { "value": "none", "label": "Empty until visitor searches" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "number",
+      "id": "height",
+      "label": "Desktop height (px)",
+      "default": 720
+    },
+    {
+      "type": "number",
+      "id": "mobile_height",
+      "label": "Mobile height (px)",
+      "default": 880
+    },
+    {
+      "type": "header",
+      "content": "Localization"
+    },
+    {
+      "type": "text",
+      "id": "language_override",
+      "label": "Language override (optional)",
+      "info": "Leave blank to auto-localize per Shopify Market. To force a specific language on this section, enter an ISO 639-1 code such as fr or de."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Storepoint locator"
+    }
+  ]
+}
+{% endschema %}
