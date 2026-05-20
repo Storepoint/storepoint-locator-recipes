@@ -1,8 +1,8 @@
-# Shopify Theme Section
+# Shopify Theme Section (Liquid)
 
-A Shopify Theme Section that wraps the Storepoint store locator with merchant-configurable settings. Once installed, merchants add the locator to any page from the theme editor and configure widget ID, pre-filter tags, default view, height, and language without touching code.
+A Shopify Liquid theme section that wraps the Storepoint store locator with merchant-configurable settings. Once installed, merchants add the locator to any page from the theme editor and configure widget ID, pre-filter tags, default view, height, and language without touching code.
 
-> **Not a developer?** You don't need this file. The simplest path on Shopify is to copy the embed code from your [Storepoint dashboard](https://app.storepoint.co/dashboard) and paste it into a Shopify Custom Liquid section, page, or theme block. See [Storepoint for Shopify](https://storepoint.co/shopify-store-locator-app) for a walkthrough. This recipe is for developers who want a reusable section a non-technical teammate can drop on multiple pages with different settings.
+> **Not a developer?** You don't need this file. The simplest path on Shopify is to copy the embed code from your [Storepoint dashboard](https://app.storepoint.co/dashboard) and paste it into a Shopify **Custom Liquid** section, the page editor's HTML view, or a custom theme block. No Liquid coding required for that method. See [Storepoint for Shopify](https://storepoint.co/platforms/shopify-store-locator) for a walkthrough. This recipe is for developers who want a reusable section a non-technical teammate can drop on multiple pages with different settings.
 
 Each section gets its own container ID and options object — important when more than one Storepoint locator appears on the same page. The Storepoint embed script loads once across all instances.
 

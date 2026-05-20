@@ -1,8 +1,10 @@
-# React component
+# React store locator hook
 
-A `useStorepointWidget` hook that loads the Storepoint embed script once per page, mounts the widget on a `ref`, and tears down on unmount.
+A `useStorepointWidget` hook for embedding the Storepoint store locator inside a React app. It loads the Storepoint embed script once per page, mounts the widget on a `ref`, and tears down on unmount, so the locator behaves correctly across navigation, hot reloads, and component remounts.
 
 The script loader is cached on a shared promise so multiple components don't re-fetch it. The widget is constructed against a React `ref` once the script is ready, and `widget.destroy()` runs when the component unmounts.
+
+Works with create-react-app, Vite, Next.js, Remix, Gatsby, and any other React 17+ setup. For Next.js and other SSR frameworks, render the component on the client only (e.g. with `dynamic(..., { ssr: false })` in Next, or a `useEffect`-gated render).
 
 ## Files
 

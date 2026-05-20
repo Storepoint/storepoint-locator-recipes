@@ -1,10 +1,22 @@
 # Storepoint Locator Recipes
 
-JavaScript store locator widget recipes — build from CSV, JSON, or a published Google Sheet, with Mapbox or Google Maps, on Shopify, React, Webflow, Squarespace, or any other website.
+<p align="center">
+  <a href="https://storepoint.co/examples">
+    <img src="./media/locator-desktop.png" alt="Storepoint store locator embedded on a customer website with search, filters, location list, and brand-matched design" width="780" />
+  </a>
+  <br />
+  <a href="https://storepoint.co/examples">
+    <img src="./media/locator-mobile.png" alt="Mobile view of a Storepoint store locator on a customer website" width="220" />
+  </a>
+  <br />
+  <sub><a href="https://storepoint.co/examples">See more live store locator examples on storepoint.co/examples</a></sub>
+</p>
 
-Code recipes for configuring and customizing the [Storepoint Locator Widget](https://storepoint.co) via its embed snippet. They layer on top of the self-serve Storepoint dashboard — reach for them when you want code-level flexibility, custom filter UIs, platform-specific integrations like Shopify Theme Sections, or to quickly generate a working store locator from a CSV or JSON file directly in code on the Storepoint store locator platform.
+Code recipes for configuring and customizing the [Storepoint](https://storepoint.co) store locator widget through its embed snippet. Build a JavaScript store locator from a CSV file, JSON file, published Google Sheet, or the Storepoint API, with Mapbox or Google Maps, on Shopify, React, WordPress, Webflow, Squarespace, or any other website.
 
-> **Not a developer?** You don't need this repo. Most customers set up Storepoint entirely in the [Storepoint dashboard](https://app.storepoint.co/login) — import a CSV, configure filters and styling, and paste the embed code on your site. These recipes are for developers who want to customize the embed beyond what the dashboard offers or work directly with code.
+Most Storepoint customers manage their locator entirely from the [Storepoint dashboard](https://app.storepoint.co/login). These recipes are for developers who want code-level flexibility, custom filter UIs, platform-specific integrations like Shopify Theme Sections, or a working preview generated straight from code and local data while prototyping.
+
+> **Not a developer?** You don't need this repo. The dashboard handles the full setup. Import a CSV (with automatic geocoding), configure filters, styling, and hours, and paste the generated embed into Shopify, Squarespace, Wix, WordPress, or any other website. See [live examples](https://storepoint.co/examples) or start a [free trial](https://app.storepoint.co/register).
 
 ## Custom code examples
 
@@ -24,7 +36,7 @@ For Webflow, Squarespace, Wix, WordPress, Drupal, Joomla, and other platforms, t
 
 ## Data sources
 
-Configure the widget to load locations from a CSV file, JSON file, any URL that returns CSV or JSON, or inline rows. Works with any widget ID — your real public widget ID in production, or `'local'` for previewing without an account.
+Configure the widget to load locations from a CSV file, JSON file, any URL that returns CSV or JSON, or inline rows. Works with any widget ID. Use your real public widget ID in production, or `'local'` for previewing without an account.
 
 | Recipe | What it does |
 | --- | --- |
@@ -37,7 +49,7 @@ For the feature overview, see [docs/data-sources.md](./docs/data-sources.md).
 
 ## Map providers
 
-Override the map provider in the embed instead of in the dashboard.
+Override the map provider in the embed instead of the dashboard.
 
 | Recipe | What it does |
 | --- | --- |
@@ -46,7 +58,7 @@ Override the map provider in the embed instead of in the dashboard.
 
 ## Local testing mode
 
-Use `'local'` as the widget ID to preview the locator without creating an account. Generates a working store locator from a CSV file, JSON file, published Google Sheet, or any URL that returns CSV in JavaScript — useful for mockups, demos, AI-generated previews, and prototyping before connecting Storepoint to your data. Pair it with any of the data source recipes above.
+Use `'local'` as the widget ID to preview the locator without creating an account. Generates a working store locator from a CSV file, JSON file, published Google Sheet, or any URL that returns CSV in JavaScript, useful for mockups, demos, AI-generated previews, and prototyping before connecting Storepoint to your data. Pair it with any of the data source recipes above.
 
 For details, see [docs/local-testing-mode.md](./docs/local-testing-mode.md).
 
@@ -65,12 +77,12 @@ For details, see [docs/local-testing-mode.md](./docs/local-testing-mode.md).
 | Embed a locator inside a React app | [React component](./platforms/react) |
 | Embed a locator on Webflow, Squarespace, Wix, WordPress, or any other website | [Quickstart embed](./examples/quickstart) |
 | Add a custom date-range filter on a date custom field | [date-range filter](./examples/custom-filters/date-range) |
-| Preview a locator without a Storepoint account | Use `'local'` as the widget ID — see [local testing mode](./docs/local-testing-mode.md) |
-| Move from a local preview to production | Swap `'local'` for your public widget ID — see [going-live.md](./docs/going-live.md) |
+| Preview a locator without a Storepoint account | Use `'local'` as the widget ID. See [local testing mode](./docs/local-testing-mode.md) |
+| Move from a local preview to production | Swap `'local'` for your public widget ID. See [going-live.md](./docs/going-live.md) |
 
 ## Going to production
 
-When the locator is working, replace `'local'` with your public Storepoint widget ID. The same widget keeps working — you decide what stays in the embed and what moves to the [Storepoint dashboard](https://app.storepoint.co/dashboard).
+When the locator is working, replace `'local'` with your public Storepoint widget ID. The same widget keeps working, and you decide what stays in the embed and what moves to the [Storepoint dashboard](https://app.storepoint.co/dashboard).
 
 ```js
 // Local testing
@@ -80,7 +92,7 @@ new StorepointWidget('local', '#storepoint-widget', { /* dataSource, fieldMap, s
 new StorepointWidget('YOUR_PUBLIC_WIDGET_ID', '#storepoint-widget', { /* optional embed overrides */ });
 ```
 
-In the dashboard you can import the same CSV (with automatic geocoding), edit locations from a spreadsheet-style UI, configure filter groups, manage hours and tags, and reuse the configuration across every embed without changing the HTML. Or keep the embed code authoritative — the widget supports both.
+In the dashboard you can import the same CSV (with automatic geocoding), edit locations from a spreadsheet-style UI, configure filter groups, manage hours and tags, and reuse the configuration across every embed without changing the HTML. Or keep the embed code authoritative. The widget supports both.
 
 For the launch checklist and what to put in the embed vs the dashboard, see [docs/going-live.md](./docs/going-live.md).
 
@@ -88,9 +100,13 @@ For the launch checklist and what to put in the embed vs the dashboard, see [doc
 
 The [`data/`](./data) folder contains three fictional datasets used by the recipes:
 
-- [`sample-locations.csv`](./data/sample-locations.csv) / [`sample-locations.json`](./data/sample-locations.json) — coffee chain
-- [`product-flavors.csv`](./data/product-flavors.csv) — ice-cream shops with flavors per location
-- [`service-providers.csv`](./data/service-providers.csv) — plumbers, electricians, HVAC contractors with services and availability dates
+- [`sample-locations.csv`](./data/sample-locations.csv) / [`sample-locations.json`](./data/sample-locations.json): coffee chain
+- [`product-flavors.csv`](./data/product-flavors.csv): ice-cream shops with flavors per location
+- [`service-providers.csv`](./data/service-providers.csv): plumbers, electricians, HVAC contractors with services and availability dates
+
+## Live store locator examples
+
+See [real Storepoint store locators](https://storepoint.co/examples) running on customer websites. Each one is a hosted widget configured from the dashboard and embedded the same way these recipes embed.
 
 ## Resources
 

@@ -45,6 +45,12 @@ The minimum production embed for the Storepoint Locator Widget. Drop the snippet
 
 Get your public widget ID from your [Storepoint dashboard](https://app.storepoint.co/dashboard) and replace `YOUR_PUBLIC_WIDGET_ID` above. New to Storepoint? See the [Quick start guide](https://storepoint.co/docs/getting-started/quick-start) for setting up your account and adding locations.
 
+### Platform notes
+
+- **Shopify**: this same snippet pastes into a **Custom Liquid** section in the theme editor or into the page editor's **HTML view**. No Liquid coding required. The [Shopify Theme Section recipe](../../platforms/shopify) is only needed if you want a reusable section that non-developers can configure from the theme editor. See [How to add a store locator to Shopify](https://storepoint.co/docs/getting-started/embed-on-website/shopify) for the full walkthrough.
+- **WordPress**: paste into a Custom HTML block, or use the [Storepoint WordPress plugin](https://wordpress.org/plugins/storepoint-store-locator/) for `[storepoint]` shortcode support.
+- **Shopify, Wordpress, Webflow, Squarespace, Wix, BigCommerce, Framer, Carrd, Duda, Ghost, HubSpot, Drupal, Joomla**: paste into the platform's HTML / Embed / Custom Code element. Per-platform guides live in the [embed-on-website docs](https://storepoint.co/docs/getting-started/embed-on-website).
+
 ## Pre-filter by tags
 
 To show only locations matching one or more tags, pass a `tags` array as the third argument. Useful for product pages, regional pages, or any page that should show a subset of locations.
